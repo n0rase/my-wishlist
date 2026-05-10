@@ -57,19 +57,14 @@
         function updateUI() {
             var savedName = localStorage.getItem('user-name');
             var savedAvatar = localStorage.getItem('user-avatar');
-
             if (savedName) nEl.innerText = savedName;
             else if (tg.initDataUnsafe?.user) nEl.innerText = tg.initDataUnsafe.user.first_name;
-            else nEl.innerText = "Пользователь";
-
             if (savedAvatar) aEl.innerHTML = `<img src="${savedAvatar}">`;
             else if (tg.initDataUnsafe?.user?.photo_url) aEl.innerHTML = `<img src="${tg.initDataUnsafe.user.photo_url}">`;
-            else aEl.innerHTML = "👤";
         }
-
         updateUI();
 
-        function openSettings() {
+        document.getElementById('nav-settings').onclick = function() {
             tg.showPopup({
                 title: 'Настройки',
                 message: 'Что изменить?',
@@ -87,16 +82,14 @@
                     if (u) { localStorage.setItem('user-avatar', u); updateUI(); }
                 }
             });
-        }
+        };
 
-        document.getElementById('nav-settings').onclick = openSettings;
-
-        // ИСПРАВЛЕННАЯ ОТПРАВКА ССЫЛКИ
+        // ЛОГИКА "ПОДЕЛИТЬСЯ"
         document.getElementById('nav-share').onclick = function() {
-            var userId = tg.initDataUnsafe?.user?.id || "0";
-            // Ссылка ведет на твоего бота с параметром твоего ID
-            var shareUrl = "https://t.me/MyWishlist_n0rase_bot/app?startapp=" + userId;
-            tg.switchInlineQuery("Глянь мой вишлист! 🎁\n" + shareUrl);
+            var userId = tg.initDataUnsafe?.user?.id || "user";
+            // Чистая ссылка на приложение
+            var link = "https://t.me/MyWishlist_n0rase_bot/app?startapp=" + userId;
+            tg.switchInlineQuery(link); 
         };
 
         document.getElementById('nav-donate').onclick = function() {
