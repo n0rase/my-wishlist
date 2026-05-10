@@ -4,140 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>My Wishlist</title>
-    <!-- SDK Telegram -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --bg: #ffffff;
-            --txt: #000000;
-            --hint: #707579;
-            --acc: #007aff;
-            --sec-bg: #f4f4f5;
-        }
-
-        body {
-            font-family: -apple-system, system-ui, sans-serif;
-            background-color: var(--sec-bg);
-            color: var(--txt);
-            margin: 0;
-            padding: 16px;
-        }
-
-        /* Улучшенная карточка профиля */
-        .profile-card {
-            background: var(--bg);
-            padding: 24px 20px;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .btn-settings {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #f0f0f2;
-            border: none;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .avatar {
-            width: 75px;
-            height: 75px;
-            background: #e1e1e1;
-            border-radius: 50%;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            flex-shrink: 0;
-            border: 2px solid #fff;
-        }
-
+        :root { --bg: #ffffff; --txt: #000000; --hint: #707579; --acc: #007aff; --sec-bg: #f4f4f5; }
+        body { font-family: -apple-system, sans-serif; background-color: var(--sec-bg); color: var(--txt); margin: 0; padding: 16px; user-select: none; }
+        .profile-card { background: var(--bg); padding: 24px 20px; border-radius: 24px; display: flex; align-items: center; gap: 16px; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .btn-settings { position: absolute; top: 12px; right: 12px; background: #f0f0f2; border: none; width: 38px; height: 38px; border-radius: 50%; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .avatar { width: 75px; height: 75px; background: #e1e1e1; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 30px; flex-shrink: 0; border: 2px solid #fff; }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
-
         .user-info h1 { margin: 0; font-size: 20px; font-weight: 700; }
-        
-        .btn-share {
-            margin-top: 8px;
-            background: #eef6ff;
-            color: var(--acc);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* Стили табов */
-        .tabs {
-            display: flex;
-            background: #e9e9eb;
-            padding: 4px;
-            border-radius: 14px;
-            margin: 20px 0;
-        }
-
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            border-radius: 11px;
-            font-weight: 600;
-            color: var(--hint);
-            cursor: pointer;
-        }
-
-        .tab.active {
-            background: var(--bg);
-            color: var(--txt);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-        /* Список карточек */
-        .wish-item {
-            background: var(--bg);
-            padding: 18px;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .wish-item h3 { margin: 0; font-size: 16px; }
-        .wish-item p { margin: 4px 0 0; color: var(--hint); font-size: 14px; font-weight: 600; }
-
-        /* Кнопка доната */
-        .btn-donate {
-            background: linear-gradient(135deg, #0088cc, #00aaff);
-            color: #fff;
-            text-align: center;
-            padding: 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            margin-top: 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,136,204,0.3);
-        }
-
-        /* Визуальный отклик */
-        .btn-settings:active, .tab:active, .btn-share:active, .btn-donate:active, .avatar:active {
-            transform: scale(0.95);
-            opacity: 0.8;
-        }
+        .btn-share { margin-top: 8px; background: #eef6ff; color: var(--acc); border: none; padding: 8px 16px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .tabs { display: flex; background: #e9e9eb; padding: 4px; border-radius: 14px; margin: 20px 0; }
+        .tab { flex: 1; text-align: center; padding: 10px; border-radius: 11px; font-weight: 600; color: var(--hint); cursor: pointer; }
+        .tab.active { background: var(--bg); color: var(--txt); box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        .wish-item { background: var(--bg); padding: 18px; border-radius: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-donate { background: linear-gradient(135deg, #0088cc, #00aaff); color: #fff; text-align: center; padding: 16px; border-radius: 20px; font-weight: 700; margin-top: 10px; cursor: pointer; }
+        .btn-settings:active, .tab:active, .avatar:active, .btn-share:active { transform: scale(0.95); opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -158,10 +40,7 @@
 
     <div id="content">
         <div class="wish-item">
-            <div>
-                <h3>AirPods Max (Silver)</h3>
-                <p>65 000 ₽</p>
-            </div>
+            <div><h3>AirPods Max</h3><p>65 000 ₽</p></div>
             <div style="color: var(--acc); font-weight: bold; font-size: 20px;">›</div>
         </div>
     </div>
@@ -176,50 +55,78 @@
         var nEl = document.getElementById('nav-name');
         var aEl = document.getElementById('nav-avatar');
 
-        // Подгружаем имя и фото
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            nEl.innerText = tg.initDataUnsafe.user.first_name;
-            if (tg.initDataUnsafe.user.photo_url) {
-                aEl.innerHTML = '<img src="' + tg.initDataUnsafe.user.photo_url + '">';
+        // ФУНКЦИЯ ОБНОВЛЕНИЯ ЭКРАНА (берет данные из памяти)
+        function updateUI() {
+            var savedName = localStorage.getItem('user-name');
+            var savedAvatar = localStorage.getItem('user-avatar');
+
+            // Имя: сначала память, потом Telegram
+            if (savedName) {
+                nEl.innerText = savedName;
+            } else if (tg.initDataUnsafe?.user) {
+                nEl.innerText = tg.initDataUnsafe.user.first_name;
+            } else {
+                nEl.innerText = "Пользователь";
+            }
+
+            // Аватарка: сначала память, потом Telegram
+            if (savedAvatar) {
+                aEl.innerHTML = `<img src="${savedAvatar}">`;
+            } else if (tg.initDataUnsafe?.user?.photo_url) {
+                aEl.innerHTML = `<img src="${tg.initDataUnsafe.user.photo_url}">`;
+            } else {
+                aEl.innerHTML = "👤";
             }
         }
 
-        // Меню
+        // Запускаем при загрузке
+        updateUI();
+
+        // НАСТРОЙКИ
         function openSettings() {
             tg.showPopup({
-                title: 'Настройки',
-                message: 'Что настроим сегодня?',
+                title: 'Настройки профиля',
+                message: 'Выберите, что хотите изменить:',
                 buttons: [
-                    {id: 'name', type: 'default', text: 'Сменить ник'},
-                    {id: 'cancel', type: 'cancel', text: 'Закрыть'}
+                    {id: 'name', type: 'default', text: 'Сменить имя'},
+                    {id: 'avatar', type: 'default', text: 'Сменить фото (ссылка)'},
+                    {id: 'cancel', type: 'cancel', text: 'Отмена'}
                 ]
-            }, function(id) {
-                if (id === 'name') {
-                    var newN = prompt("Введи новое имя:", nEl.innerText);
-                    if (newN) nEl.innerText = newN;
+            }, function(buttonId) {
+                if (buttonId === 'name') {
+                    var newName = prompt("Введите новое имя:", nEl.innerText);
+                    if (newName !== null && newName.trim() !== "") {
+                        localStorage.setItem('user-name', newName);
+                        updateUI();
+                    }
+                } else if (buttonId === 'avatar') {
+                    var newUrl = prompt("Вставьте прямую ссылку на фото (URL):");
+                    if (newUrl !== null && newUrl.trim() !== "") {
+                        localStorage.setItem('user-avatar', newUrl);
+                        updateUI();
+                    }
                 }
             });
         }
 
-        // Привязка действий
         document.getElementById('nav-settings').onclick = openSettings;
-        document.getElementById('nav-avatar').onclick = openSettings;
+        aEl.onclick = openSettings;
 
+        // ПОДЕЛИТЬСЯ (Выбор чата)
         document.getElementById('nav-share').onclick = function() {
-            var userId = tg.initDataUnsafe?.user?.id || "000";
-            var botLink = "https://t.me/MyWishlist_n0rase_bot/app?startapp=" + userId;
-            tg.switchInlineQuery("Глянь мой вишлист! 🎁\n" + botLink);
+            // Открывает выбор чата в Telegram
+            tg.switchInlineQuery("Посмотри мой вишлист! 🎁", ["users", "groups", "channels"]);
         };
 
+        // КНОПКА ДОНАТА
         document.getElementById('nav-donate').onclick = function() {
-            tg.showConfirm("Нравится приложение?", function(ok) {
-                if(ok) tg.showAlert("💎 Огромное спасибо!");
+            tg.showConfirm("Хотите поддержать проект?", function(ok){
+                if(ok) tg.showAlert("💎 Огромное спасибо за поддержку!");
             });
         };
 
-        // Логика табов
-        var tw = document.getElementById('t-want');
-        var td = document.getElementById('t-done');
+        // ТАБЫ
+        var tw = document.getElementById('t-want'), td = document.getElementById('t-done');
         tw.onclick = function() { tw.className = 'tab active'; td.className = 'tab'; };
         td.onclick = function() { td.className = 'tab active'; tw.className = 'tab'; };
     </script>
