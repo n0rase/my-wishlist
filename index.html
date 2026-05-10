@@ -19,7 +19,6 @@
         .tab.active { background: var(--bg); color: var(--txt); box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         .wish-item { background: var(--bg); padding: 18px; border-radius: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
         .btn-donate { background: linear-gradient(135deg, #0088cc, #00aaff); color: #fff; text-align: center; padding: 16px; border-radius: 20px; font-weight: 700; margin-top: 10px; cursor: pointer; }
-        .btn-settings:active, .tab:active, .avatar:active, .btn-share:active { transform: scale(0.95); opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -55,77 +54,55 @@
         var nEl = document.getElementById('nav-name');
         var aEl = document.getElementById('nav-avatar');
 
-        // ФУНКЦИЯ ОБНОВЛЕНИЯ ЭКРАНА (берет данные из памяти)
         function updateUI() {
             var savedName = localStorage.getItem('user-name');
             var savedAvatar = localStorage.getItem('user-avatar');
 
-            // Имя: сначала память, потом Telegram
-            if (savedName) {
-                nEl.innerText = savedName;
-            } else if (tg.initDataUnsafe?.user) {
-                nEl.innerText = tg.initDataUnsafe.user.first_name;
-            } else {
-                nEl.innerText = "Пользователь";
-            }
+            if (savedName) nEl.innerText = savedName;
+            else if (tg.initDataUnsafe?.user) nEl.innerText = tg.initDataUnsafe.user.first_name;
+            else nEl.innerText = "Пользователь";
 
-            // Аватарка: сначала память, потом Telegram
-            if (savedAvatar) {
-                aEl.innerHTML = `<img src="${savedAvatar}">`;
-            } else if (tg.initDataUnsafe?.user?.photo_url) {
-                aEl.innerHTML = `<img src="${tg.initDataUnsafe.user.photo_url}">`;
-            } else {
-                aEl.innerHTML = "👤";
-            }
+            if (savedAvatar) aEl.innerHTML = `<img src="${savedAvatar}">`;
+            else if (tg.initDataUnsafe?.user?.photo_url) aEl.innerHTML = `<img src="${tg.initDataUnsafe.user.photo_url}">`;
+            else aEl.innerHTML = "👤";
         }
 
-        // Запускаем при загрузке
         updateUI();
 
-        // НАСТРОЙКИ
         function openSettings() {
             tg.showPopup({
-                title: 'Настройки профиля',
-                message: 'Выберите, что хотите изменить:',
+                title: 'Настройки',
+                message: 'Что изменить?',
                 buttons: [
                     {id: 'name', type: 'default', text: 'Сменить имя'},
                     {id: 'avatar', type: 'default', text: 'Сменить фото (ссылка)'},
                     {id: 'cancel', type: 'cancel', text: 'Отмена'}
                 ]
-            }, function(buttonId) {
-                if (buttonId === 'name') {
-                    var newName = prompt("Введите новое имя:", nEl.innerText);
-                    if (newName !== null && newName.trim() !== "") {
-                        localStorage.setItem('user-name', newName);
-                        updateUI();
-                    }
-                } else if (buttonId === 'avatar') {
-                    var newUrl = prompt("Вставьте прямую ссылку на фото (URL):");
-                    if (newUrl !== null && newUrl.trim() !== "") {
-                        localStorage.setItem('user-avatar', newUrl);
-                        updateUI();
-                    }
+            }, function(btn) {
+                if (btn === 'name') {
+                    var n = prompt("Имя:", nEl.innerText);
+                    if (n) { localStorage.setItem('user-name', n); updateUI(); }
+                } else if (btn === 'avatar') {
+                    var u = prompt("Прямая ссылка на фото:");
+                    if (u) { localStorage.setItem('user-avatar', u); updateUI(); }
                 }
             });
         }
 
         document.getElementById('nav-settings').onclick = openSettings;
-        aEl.onclick = openSettings;
 
-        // ПОДЕЛИТЬСЯ (Выбор чата)
+        // ИСПРАВЛЕННАЯ ОТПРАВКА ССЫЛКИ
         document.getElementById('nav-share').onclick = function() {
-            // Открывает выбор чата в Telegram
-            tg.switchInlineQuery("Посмотри мой вишлист! 🎁", ["users", "groups", "channels"]);
+            var userId = tg.initDataUnsafe?.user?.id || "0";
+            // Ссылка ведет на твоего бота с параметром твоего ID
+            var shareUrl = "https://t.me/MyWishlist_n0rase_bot/app?startapp=" + userId;
+            tg.switchInlineQuery("Глянь мой вишлист! 🎁\n" + shareUrl);
         };
 
-        // КНОПКА ДОНАТА
         document.getElementById('nav-donate').onclick = function() {
-            tg.showConfirm("Хотите поддержать проект?", function(ok){
-                if(ok) tg.showAlert("💎 Огромное спасибо за поддержку!");
-            });
+            tg.showAlert("💎 Спасибо за поддержку!");
         };
 
-        // ТАБЫ
         var tw = document.getElementById('t-want'), td = document.getElementById('t-done');
         tw.onclick = function() { tw.className = 'tab active'; td.className = 'tab'; };
         td.onclick = function() { td.className = 'tab active'; tw.className = 'tab'; };
